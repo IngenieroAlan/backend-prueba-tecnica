@@ -2,13 +2,20 @@ using BackendPruebaTecnica.Context;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+var connectionString = builder.Configuration.GetConnectionString("Connection");
+var serverVersion = new MySqlServerVersion(new Version(8, 0, 31));
 
 // Add services to the container.
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<AppDbContext>();
+builder.Services.AddDbContext<AppDbContext>( options => 
+    options.UseMySql(connectionString,serverVersion)
+            //Opciones de desarrollador
+            .LogTo(Console.WriteLine, LogLevel.Information)
+            .EnableSensitiveDataLogging()
+            .EnableDetailedErrors());
 
 var app = builder.Build();
 
