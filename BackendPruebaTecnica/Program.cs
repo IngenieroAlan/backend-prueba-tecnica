@@ -43,13 +43,20 @@ builder.Services.AddAuthentication(config => {
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]!))
     };
 });
+
+//Activamos cors
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("NewPolicy", app => app.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+});
+
 var app = builder.Build();
 
-/*using (var scope = app.Services.CreateScope())
+using (var scope = app.Services.CreateScope())
 {
     AppDbContext ctx = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    ctx.Database.();
-}*/
+    ctx.Database.EnsureCreated();
+}
 
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment())
@@ -59,6 +66,8 @@ var app = builder.Build();
     }
 
 app.UseHttpsRedirection();
+
+app.UseCors("NewPolicy");
 
 app.UseAuthentication();
 

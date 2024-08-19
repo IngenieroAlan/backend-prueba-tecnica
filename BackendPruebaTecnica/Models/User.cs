@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace BackendPruebaTecnica.Models
 {
@@ -9,6 +10,7 @@ namespace BackendPruebaTecnica.Models
         [MaxLength(90)]
         public required string UserName { get; set; }
         [MaxLength(180)]
+        [EmailAddress]
         public required string Email { get; set; }
         public required DateTime RegisterDate {get;set;}
     }

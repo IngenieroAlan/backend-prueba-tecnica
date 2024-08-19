@@ -7,13 +7,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BackendPruebaTecnica.Context;
 using BackendPruebaTecnica.Models;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace BackendPruebaTecnica.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
-    public class UserController : ControllerBase
+    public class UserController : ControllerBase //TODO: Mejorar mensajes de error
     {
         private readonly AppDbContext _context;
 
@@ -44,31 +46,19 @@ namespace BackendPruebaTecnica.Controllers
         }
         //Endpoint para buscar un usuarios por nombre
         // Method GET - Endpoint: api/user/?
-        [HttpGet("username/{userName}")]
-        public async Task<ActionResult<User>> GetUserByName(string userName)
+        [HttpGet("Search")]
+        public async Task<ActionResult<User>> GetUserByName([FromQuery] string q)
         {
-            var user = await _context.Users.FindAsync(userName);
+            var result = await _context.Users
+                .Where(u => u.UserName.Contains(q) || u.Email.Contains(q))
+                .FirstOrDefaultAsync();
 
-            if (user == null)
+            if (result == null)
             {
-                return NotFound();
+                return NotFound(new { message = $"No se encontro ningun usuario llamado '{q}'" });
             }
 
-            return user;
-        }
-        //Endpoint para buscar un usuarios por correo
-        // GET: api/User/5
-        [HttpGet("{email}")]
-        public async Task<ActionResult<User>> GetUserByEmail(string email)
-        {
-            var user = await _context.Users.FindAsync(email);
-
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return user;
+            return Ok(result);
         }
         //Endpoint para actualizar los valores de un usuario
         // PUT: api/User/5
@@ -108,7 +98,7 @@ namespace BackendPruebaTecnica.Controllers
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetUser", new { id = user.Id }, user);
+            return CreatedAtAction("GetUserById", new { id = user.Id }, user);
         }
 
         //Endopoint para borrar un usuario

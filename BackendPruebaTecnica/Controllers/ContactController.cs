@@ -7,16 +7,19 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BackendPruebaTecnica.Context;
 using BackendPruebaTecnica.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BackendPruebaTecnica.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class ContactController : ControllerBase
     {
         private readonly AppDbContext _context;
 
-        public ContactController(AppDbContext context)
+        public ContactController(AppDbContext context)//TODO: Mejorar mensajes de error
         {
             _context = context;
         }
@@ -72,6 +75,22 @@ namespace BackendPruebaTecnica.Controllers
             }
 
             return NoContent();
+        }
+        //Endpoint para buscar un contactos por nombre
+        // Method GET - Endpoint: api/contact/search
+        [HttpGet("search")]
+        public async Task<ActionResult<Contact>> GetContactByName([FromQuery] string q)
+        {
+            var result = await _context.Contacts
+                .Where(c => c.Name.Contains(q) || c.Email.Contains(q))
+                .FirstOrDefaultAsync();
+
+            if (result == null)
+            {
+                return NotFound(new { message = $"No se encontro ningun contacto llamado '{q}'" });
+            }
+
+            return Ok(result);
         }
         //Endpoint para agregar un contacto
         // Method: post -  endpoint: api/contact/

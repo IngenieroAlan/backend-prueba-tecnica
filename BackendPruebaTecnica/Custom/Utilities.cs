@@ -14,7 +14,7 @@ namespace BackendPruebaTecnica.Custom
         {
             _configuration = configuration;
         }
-        public string encriptarSHA256(string text) 
+        public string encryptSHA256(string text) 
         {
             using (SHA256 sha256Hash = SHA256.Create())
             {
@@ -29,7 +29,7 @@ namespace BackendPruebaTecnica.Custom
                 return builder.ToString();
             }
         }
-        public string generarJWT(User user)
+        public string generateJWT(User user)
         {
             //Crear la informacion del usuario para token
             var userClaims = new[]
