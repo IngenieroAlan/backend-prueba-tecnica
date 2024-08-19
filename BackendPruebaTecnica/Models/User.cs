@@ -10,6 +10,6 @@ namespace BackendPruebaTecnica.Models
         public required string UserName { get; set; }
         [MaxLength(180)]
         public required string Email { get; set; }
-        public required DateTime FechaRegistro {get;set;}
+        public required DateTime RegisterDate {get;set;}
     }
 }

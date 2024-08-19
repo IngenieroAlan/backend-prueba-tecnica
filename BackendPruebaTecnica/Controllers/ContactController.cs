@@ -10,7 +10,7 @@ using BackendPruebaTecnica.Models;
 
 namespace BackendPruebaTecnica.Controllers
 {
-    [Route("api/contact")]
+    [Route("api/[controller]")]
     [ApiController]
     public class ContactController : ControllerBase
     {

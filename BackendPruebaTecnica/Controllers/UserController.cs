@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BackendPruebaTecnica.Context;
 using BackendPruebaTecnica.Models;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 
 namespace BackendPruebaTecnica.Controllers
 {
@@ -20,17 +21,17 @@ namespace BackendPruebaTecnica.Controllers
         {
             _context = context;
         }
-
-        // GET: api/User
+        //Endpoint para mostrar a los usuarios
+        // Method GET - Endpoint: api/User
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
             return await _context.Users.ToListAsync();
         }
-
-        // GET: api/User/5
+        //Endpoint para buscar un usuarios por id
+        // Method GET - Endpoint: api/user/?
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(int id)
+        public async Task<ActionResult<User>> GetUserById(int id)
         {
             var user = await _context.Users.FindAsync(id);
 
@@ -41,9 +42,36 @@ namespace BackendPruebaTecnica.Controllers
 
             return user;
         }
+        //Endpoint para buscar un usuarios por nombre
+        // Method GET - Endpoint: api/user/?
+        [HttpGet("username/{userName}")]
+        public async Task<ActionResult<User>> GetUserByName(string userName)
+        {
+            var user = await _context.Users.FindAsync(userName);
 
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return user;
+        }
+        //Endpoint para buscar un usuarios por correo
+        // GET: api/User/5
+        [HttpGet("{email}")]
+        public async Task<ActionResult<User>> GetUserByEmail(string email)
+        {
+            var user = await _context.Users.FindAsync(email);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return user;
+        }
+        //Endpoint para actualizar los valores de un usuario
         // PUT: api/User/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUser(int id, User user)
         {
@@ -72,9 +100,8 @@ namespace BackendPruebaTecnica.Controllers
 
             return NoContent();
         }
-
+        //Endpoint para agregar un usuario
         // POST: api/User
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(User user)
         {
@@ -84,6 +111,7 @@ namespace BackendPruebaTecnica.Controllers
             return CreatedAtAction("GetUser", new { id = user.Id }, user);
         }
 
+        //Endopoint para borrar un usuario
         // DELETE: api/User/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
