@@ -10,7 +10,7 @@ namespace BackendPruebaTecnica.Models
         public int UserId {  get; set; }
         //Asignamos UserId como una llave foranea
         [ForeignKey("UserId")]
-        public User User { get; set; }
+        public User? User { get; set; }
         [MaxLength(90)]
         public string Name { get; set; }
         [MaxLength(10)]

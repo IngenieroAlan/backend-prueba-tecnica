@@ -107,14 +107,21 @@ namespace BackendPruebaTecnica.Controllers
             return Ok(result);
         }
         //Endpoint para agregar un contacto
-        // Method: post -  endpoint: api/contact/
+        // Method: post -  endpoint: api/contact/ 
         [HttpPost]
         public async Task<ActionResult<Contact>> PostContact(Contact contact)
         {
+            var userExists = await _context.Users.AnyAsync(u => u.Id == contact.UserId);
+
+            if (!userExists)
+            {
+                return NotFound("El Usuario al que le quieres asignar el contacto no existe");
+            }
+
             _context.Contacts.Add(contact);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetContact", new { id = contact.Id }, contact);
+            return CreatedAtAction("GetContactById", new { id = contact.Id }, contact);
         }
         //Endpoint para eliminar un contacto
         // Method: delete -  endpoint: api/contact
