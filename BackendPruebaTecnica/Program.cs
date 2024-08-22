@@ -8,12 +8,13 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = builder.Configuration.GetConnectionString("Connection");
+//Seleccionar la conexion deseada...
+var connectionString = builder.Configuration.GetConnectionString("RemoteConnection");
 var serverVersion = new MySqlServerVersion(new Version(8, 0, 31));
 
 // Add services to the container.
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>( options => 

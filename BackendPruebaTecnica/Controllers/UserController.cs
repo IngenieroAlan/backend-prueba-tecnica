@@ -15,7 +15,7 @@ namespace BackendPruebaTecnica.Controllers
     [Route("api/[controller]")]
     [Authorize]
     [ApiController]
-    public class UserController : ControllerBase //TODO: Mejorar mensajes de error
+    public class UserController : ControllerBase
     {
         private readonly AppDbContext _context;
 

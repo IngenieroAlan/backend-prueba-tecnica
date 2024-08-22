@@ -21,7 +21,7 @@ namespace BackendPruebaTecnica.Controllers
     {
         private readonly AppDbContext _context;
 
-        public ContactController(AppDbContext context)//TODO: Mejorar mensajes de error
+        public ContactController(AppDbContext context)
         {
             _context = context;
         }
@@ -37,7 +37,6 @@ namespace BackendPruebaTecnica.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Contact>> GetContactById(int id)
         {
-            //Realizamos la peticion a la bd para que busque el id
             var contact = await _context.Contacts.FindAsync(id);
 
             if (contact == null)
