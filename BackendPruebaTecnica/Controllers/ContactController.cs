@@ -47,10 +47,10 @@ namespace BackendPruebaTecnica.Controllers
 
             return contact;
         }
-        [HttpGet("user/{userId}")]
+        [HttpGet("User/{userId}")]
         public async Task<ActionResult<Contact>> GetContactByUserId(int userId)
         {
-            var contacts = await _context.Contacts.Where(c => c.UserId == userId).FirstOrDefaultAsync();
+            var contacts = await _context.Contacts.Where(c => c.UserId == userId).ToListAsync();
 
             if (contacts == null)
             {
