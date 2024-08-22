@@ -18,11 +18,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>( options => 
-    options.UseMySql(connectionString,serverVersion)
-            //Opciones de desarrollador
-            .LogTo(Console.WriteLine, LogLevel.Information)
-            .EnableSensitiveDataLogging()
-            .EnableDetailedErrors());
+    options.UseMySql(connectionString,serverVersion));
 
 builder.Services.AddSingleton<Utilities>();
 builder.Services.AddAuthentication(config => {
