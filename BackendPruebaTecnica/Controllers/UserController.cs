@@ -42,7 +42,7 @@ namespace BackendPruebaTecnica.Controllers
                 return NotFound();
             }
 
-            return user;
+            return StatusCode(StatusCodes.Status200OK, new { isSuccess = true, message = "Usuario encontrado", data = user });
         }
         //Endpoint para buscar un usuarios por nombre
         // Method GET - Endpoint: api/user/?

@@ -9,6 +9,8 @@ using BackendPruebaTecnica.Context;
 using BackendPruebaTecnica.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 
 namespace BackendPruebaTecnica.Controllers
 {
@@ -33,7 +35,7 @@ namespace BackendPruebaTecnica.Controllers
         //Endpoint para obtener un contacto en base al id
         // Method: get -  Endpoint: api/contact/?
         [HttpGet("{id}")]
-        public async Task<ActionResult<Contact>> GetContact(int id)
+        public async Task<ActionResult<Contact>> GetContactById(int id)
         {
             //Realizamos la peticion a la bd para que busque el id
             var contact = await _context.Contacts.FindAsync(id);
@@ -44,6 +46,18 @@ namespace BackendPruebaTecnica.Controllers
             }
 
             return contact;
+        }
+        [HttpGet("user/{userId}")]
+        public async Task<ActionResult<Contact>> GetContactByUserId(int userId)
+        {
+            var contacts = await _context.Contacts.Where(c => c.UserId == userId).FirstOrDefaultAsync();
+
+            if (contacts == null)
+            {
+                return StatusCode(StatusCodes.Status200OK, new { isSuccess = false, message = "El usuario no tiene contactos" });
+            }
+
+            return StatusCode(StatusCodes.Status200OK, new { isSuccess = true, message = "Contactos encontrados", data = contacts });
         }
 
         //Endpoint para actualizar un contacto en base al id
